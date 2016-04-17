@@ -20,4 +20,4 @@ class PinPointSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Pins
         geo_field = "geom"
-        fields = ('id', 'name', 'descr', 'geom')
+        fields = ('id', 'name', 'descr', 'type', 'status', 'comments', 'created', 'assigned', 'resolved', 'user', 'geom')
