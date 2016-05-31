@@ -16,6 +16,8 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -25,13 +27,13 @@ SECRET_KEY = 'ukwd_oi=d__++4m^^m)n401b0le_@9tuy40obkzc)+()%pl6fx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    #'django.contrib.sites',
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +44,16 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_gis',
     'pinpointhint',
+
+    'bootstrap_toolkit',
+    'compressor',
+    'selectable',
+
+    'timepiece',
+    'timepiece.contracts',
+    'timepiece.crm',
+    'timepiece.entries',
+    'timepiece.reports',
 
     'django.contrib.humanize',  # Required for elapsed time formatting
     'markdown_deux',  # Required for Knowledgebase item formatting
@@ -62,10 +74,12 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'daamapi.urls'
 
+PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['%s/templates' % PROJECT_PATH],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,12 +88,37 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.core.context_processors.request',
+
+
+                "django.core.context_processors.i18n",
+                "django.core.context_processors.media",
+                "timepiece.context_processors.quick_clock_in",      # <----
+                "timepiece.context_processors.quick_search",        # <----
+                "timepiece.context_processors.extra_settings",      # <----
+
             ],
         },
     },
 ]
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
+
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
+)
+COMPRESS_ROOT = '%s/static/' % PROJECT_PATH
+INTERNAL_IPS = ('127.0.0.1',)
+
+
 WSGI_APPLICATION = 'daamapi.wsgi.application'
+
+
+
 
 
 # Database
@@ -128,7 +167,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -141,6 +180,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/opt/daamapi/pinpointhint/static/'
 
 #MEDIA_ROOT = '/opt/daamapi/pinpointhint/static/helpdesk/attachments/'
-MEDIA_ROOT = '/opt/daamapi/pinpointhint/static/docs/'
+#MEDIA_ROOT = '/opt/daamapi/pinpointhint/static/docs/'
+MEDIA_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+'/pinpointhint/static/img'
+MEDIA_URL = '/static/img/'
 
 HELPDESK_ENABLE_PER_QUEUE_PERMISSION = True

@@ -12,8 +12,14 @@ from django.contrib.auth.models import User
 class Types (models.Model):
     name = models.CharField(max_length=200)
 
+    def __str__(self):              # __unicode__ on Python 2
+        return self.name
+
 class Status (models.Model):
     name = models.CharField(max_length=200)
+
+    def __str__(self):              # __unicode__ on Python 2
+        return self.name
 
 class Pins(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
@@ -26,3 +32,6 @@ class Pins(models.Model):
     resolved = models.DateTimeField(blank=True, null=True)
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name='user')
     geom = models.PointField(blank=True, null=True, srid=4326)
+    #pic = models.ImageField(upload_to="img/", blank=True, null=True)
+    pic = models.ImageField(blank=True, null=True)
+    picture = models.CharField(max_length=20000, blank=True, null=True)
